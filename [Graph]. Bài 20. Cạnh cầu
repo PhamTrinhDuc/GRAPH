@@ -1,0 +1,62 @@
+#include<bits/stdc++.h>
+#define ll long long
+using namespace std ;
+
+int mod = 1e9 + 7 ; 
+int n ,m ; 
+set<int> se[1005] ; 
+bool used[1005] ; 
+vector<pair<int,int> > dscanh ; 
+
+void nhap(){
+    cin >> n >> m ; 
+    for(int i=0 ; i<m ; i++ ){
+        int x, y ; cin >> x >> y ;
+        dscanh.push_back({x , y}) ;  
+        se[x].insert(y);
+        se[y].insert(x) ; 
+    }
+}
+void dfs(int u ){
+    used[u] = true ; 
+    for(int v : se[u]){
+        if(!used[v]){
+            dfs(v) ; 
+        }
+    }
+}
+
+void loaibocanhcau(){
+    int ans = 0 ; // dem so luong canh bi loai bo 
+    int cnt = 0 ; // dem so tplt ban dau 
+    memset(used , false, sizeof(used) ) ; 
+    for(int i=1 ; i<=n ;i++ ){
+        if(!used[i]){
+            cnt++ ; 
+            dfs(i); 
+        }
+    }
+    for(auto it : dscanh){
+        int x = it.first , y = it.second ; 
+        // loai bo canh ra khoi do thi 
+        se[x].erase(y) ; 
+        se[y].erase(x) ; 
+        memset(used , false , sizeof(used) ) ; 
+        int dem = 0 ; // dem so luong tplt sau khi bo canh 
+        for(int j=1 ; j<=n ; j++ ){
+            if(!used[j]){
+                dem++ ; 
+                dfs(j) ; 
+            }
+        }
+        if(dem > cnt ) ans++ ; 
+        se[x].insert(y) ;
+        se[y].insert(x) ; 
+    }
+    cout << ans  ; 
+}
+int main(){
+    nhap() ; 
+    loaibocanhcau() ; 
+    return 0 ; 
+}
