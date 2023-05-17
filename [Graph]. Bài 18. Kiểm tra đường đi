@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+int n , m , dem = 0 ; 
+vector<int> adj[1005] ; 
+bool used[1005] ; 
+int cnt[1005] ; 
+void ip(){
+    cin >> n >> m ; 
+    for(int i=0 ; i<m ; i++){
+        int x , y ; cin >> x >> y ; 
+        adj[x].push_back(y) ;
+        adj[y].push_back(x) ; 
+    }
+    memset(used , false , sizeof(used)) ; 
+}
+
+void dfs(int u){
+    cnt[u] = dem ; 
+    used[u] = true ; 
+    for(int v : adj[u]){  
+        if(!used[v]){
+            dfs(v) ; 
+        }
+    }
+}
+int main() {
+    ip() ; 
+    for(int i=1 ; i<=n ; i++ ){
+        if(!used[i]){
+            dem++ ; 
+            dfs(i) ; 
+        }
+    }
+    int t ; cin >> t ; 
+    while(t--){
+        int s , t ; cin >> s >> t ; 
+        if(cnt[s] == cnt[t] ) cout << "1\n" ; 
+        else cout <<"-1\n" ; 
+    }
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+    return 0;
+}
